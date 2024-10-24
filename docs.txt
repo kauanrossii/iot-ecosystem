@@ -1,0 +1,25 @@
+* Mensageria -> É um modelo de transmitir informações entre diferentes aplicações, simplificando as
+comunicações sem que uma aplicação conheça exatamente as características técnicas de uma determinada
+aplicação para se comunicar com ela, desse modo todas as aplicações utilizam a mesma "linguagem" tor-
+nando cada aplicação agnóstica às demais. Um caso de uso, seria separar a comunicação entre produtores
+de informações, como aplicações de sensores, e consumidores de informações, como um serviço que reali-
+za cálculos a partir dessas informações.
+
+* Filas -> É uma linha de mensagens, relacionadas à um determinado contexto, que estão aguardando para
+serem consumidas.
+
+* Tópicos -> Tópicos são as categorias de mensagens que são armazenadas em uma determinada fila. Eles po-
+dem ser utilizados para definir um determinado cenário para um sistema, por exemplo, um tópico pode agrupar
+as mensagens relacionadas ao evento de geração de boleto por uma aplicação, que precisa notificar outra.
+
+* Partições -> Podem ser entendidos como a separação lógica de mensagens dentro de um tópico, que possuem
+determinadas informações em comum, e podem ser agrupadas para melhor localização ou escalabilidade. A
+informação que é comum entre as mensagens é chamada de "key".
+
+* Produtores -> São as aplicações que produzem os eventos para serem enviados para outras aplicações. Essa
+separação permite que os produtores se concentrem apenas em organizar e coletar as informações, sem necessitar
+de aplicar lógicas de processamentos para o salvamento das informações.
+
+* Consumidores -> São as aplicações que leem os eventos produzidos por outras aplicações, concentrando-se em
+realizar processamentos ou salvamentos a partir daquele evento.
+
