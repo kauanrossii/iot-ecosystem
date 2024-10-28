@@ -23,3 +23,8 @@ de aplicar lógicas de processamentos para o salvamento das informações.
 * Consumidores -> São as aplicações que leem os eventos produzidos por outras aplicações, concentrando-se em
 realizar processamentos ou salvamentos a partir daquele evento.
 
+--------------------------------------------------------------------------------------------------------
+
+Solução - IoT-Ecosystem
+* Para aplicar mensageria em um caso de uso real, foi desenvolvido o sistema que simula a interação entre
+dispositivos IoT e a aplicação que consome os dados deles para realizar um determinado processamento. 
