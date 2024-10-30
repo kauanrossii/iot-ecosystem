@@ -3,7 +3,7 @@ import { Kafka } from "kafkajs";
 async function configureKafka() {
     const kafka = new Kafka({
         clientId: 'iot-manager',
-        brokers: ['localhost:9093']
+        brokers: ['kafka:29092']
     });
 
     const consumer = kafka.consumer({ groupId: 'iot-ecosystem' });

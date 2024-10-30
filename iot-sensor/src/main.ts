@@ -13,7 +13,7 @@ const factoryCenterPosition: IPositionPoint = {
 
 const kafka = new Kafka({
     clientId: "iot-sensor",
-    brokers: ['localhost:9093']
+    brokers: ['kafka:29092']
 });
 
 const producer = kafka.producer();

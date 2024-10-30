@@ -1,6 +1,7 @@
 services:
   zookeeper:
     image: "docker.io/bitnami/zookeeper:3"
+    container_name: zookeeper
     ports:
       - "2181:2181"
     environment:
@@ -11,20 +12,32 @@ services:
     ports:
       - "9092:9092"
       - "9093:9093"
+    expose:
+      - '29092'
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:29092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:29092,EXTERNAL://localhost:9093
     depends_on:
       - zookeeper
+
+  init-kafka:
+    image: "docker.io/bitnami/zookeeper:3"
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+        bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --topic factory-sensors-presence --partitions 3 --replication-factor 1
+      "
 
   manager:
     build: ./iot-manager
     depends_on:
-      - kafka
+      - init-kafka
     ports:
       - 3000:3000
     command: npm start run
@@ -34,21 +47,29 @@ services:
     environment:
       - SENSOR_ID=1
     command: npm start run
+    depends_on:
+      - init-kafka
 
   sensor2:
     build: ./iot-sensor
     environment:
-      - SENSOR_ID=1
+      - SENSOR_ID=2
     command: npm start run
+    depends_on:
+      - init-kafka
 
   sensor3:
     build: ./iot-sensor
     environment:
-      - SENSOR_ID=1
+      - SENSOR_ID=3
     command: npm start run
+    depends_on:
+      - init-kafka
 
   sensor4:
     build: ./iot-sensor
     environment:
-      - SENSOR_ID=1
-    command: npm start run
+      - SENSOR_ID=4
+    command: npm start run    
+    depends_on:
+      - init-kafka
